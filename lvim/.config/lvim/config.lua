@@ -9,6 +9,7 @@ an executable
 vim.opt.guicursor = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
+vim.opt.expandtab = false
 
 -- general
 lvim.log.level = "warn"
@@ -95,6 +96,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- ---@usage disable automatic installation of servers
 -- lvim.lsp.automatic_servers_installation = false
 
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "gopls" })
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
