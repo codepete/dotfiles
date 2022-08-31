@@ -23,8 +23,7 @@ lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 -- unmap a default keymapping
---     ["<C-n>"] = actions.cycle_history_next,
---     ["<C-p>"] = actions.cycle_history_prev,
+--     ["<C-n>"] = actions.cycle_history_next, ["<C-p>"] = actions.cycle_history_prev,
 --   },
 --   -- for normal mode
 --   n = {
@@ -206,8 +205,20 @@ lvim.plugins = {
       require("lspsaga").init_lsp_saga()
     end
   },
+  {
+    "ray-x/lsp_signature.nvim",
+    config = function()
+      require "lsp_signature".setup({
+        bind = true,
+        handler_opts = {
+          border = "rounded"
+        }
+      })
+    end
+  },
   { "folke/tokyonight.nvim" }
 }
+
 require("symbols-outline").setup()
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
