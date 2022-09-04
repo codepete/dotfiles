@@ -34,6 +34,8 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["dv"] = { "<cmd>lua require('dapui').toggle()<CR>", "Toggle Debug UI View" }
+lvim.builtin.which_key.mappings["lo"] = { "<cmd>SymbolOutline<CR>", "Toggle SymbolOutline" }
+lvim.builtin.which_key.mappings["lh"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" }
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 -- lvim.builtin.which_key.mappings["t"] = {
 --   name = "+Trouble",
@@ -58,19 +60,19 @@ lvim.builtin.dap.active = true
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
-  "bash",
-  "c",
-  "javascript",
-  "json",
-  "lua",
-  "python",
-  "typescript",
-  "tsx",
-  "css",
-  "rust",
-  "java",
-  "yaml",
-  "go",
+	"bash",
+	"c",
+	"javascript",
+	"json",
+	"lua",
+	"python",
+	"typescript",
+	"tsx",
+	"css",
+	"rust",
+	"java",
+	"yaml",
+	"go",
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
@@ -154,69 +156,69 @@ vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "gopls" })
 
 -- Additional Plugins
 lvim.plugins = {
-  {
-    "nvim-telescope/telescope-dap.nvim",
-    config = function()
-      require('telescope').load_extension('dap')
-    end
-  },
-  {
-    "rcarriga/nvim-dap-ui",
-    config = function()
-      require("dapui").setup()
-    end
-  },
-  {
-    "leoluz/nvim-dap-go",
-    config = function()
-      require('dap-go').setup()
-    end
-  },
-  {
-    "tzachar/cmp-tabnine",
-    run = "./install.sh",
-    requires = "hrsh7th/nvim-cmp",
-    config = function()
-      local tabnine = require("cmp_tabnine.config")
-      tabnine:setup {
-        max_lines = 1000,
-        max_num_results = 10,
-        sort = true,
-      }
-    end,
-    opt = true,
-    event = "InsertEnter",
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    config = function()
-      require("treesitter-context").setup()
-    end
-  },
-  {
-    "simrat39/symbols-outline.nvim",
-    config = function()
-      require("symbols-outline").setup()
-    end
-  },
-  {
-    "glepnir/lspsaga.nvim",
-    config = function()
-      require("lspsaga").init_lsp_saga()
-    end
-  },
-  {
-    "ray-x/lsp_signature.nvim",
-    config = function()
-      require "lsp_signature".setup({
-        bind = true,
-        handler_opts = {
-          border = "rounded"
-        }
-      })
-    end
-  },
-  { "folke/tokyonight.nvim" }
+	{
+		"nvim-telescope/telescope-dap.nvim",
+		config = function()
+			require('telescope').load_extension('dap')
+		end
+	},
+	{
+		"rcarriga/nvim-dap-ui",
+		config = function()
+			require("dapui").setup()
+		end
+	},
+	{
+		"leoluz/nvim-dap-go",
+		config = function()
+			require('dap-go').setup()
+		end
+	},
+	{
+		"tzachar/cmp-tabnine",
+		run = "./install.sh",
+		requires = "hrsh7th/nvim-cmp",
+		config = function()
+			local tabnine = require("cmp_tabnine.config")
+			tabnine:setup {
+				max_lines = 1000,
+				max_num_results = 10,
+				sort = true,
+			}
+		end,
+		opt = true,
+		event = "InsertEnter",
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		config = function()
+			require("treesitter-context").setup()
+		end
+	},
+	{
+		"simrat39/symbols-outline.nvim",
+		config = function()
+			require("symbols-outline").setup()
+		end
+	},
+	{
+		"glepnir/lspsaga.nvim",
+		config = function()
+			require("lspsaga").init_lsp_saga()
+		end
+	},
+	{
+		"ray-x/lsp_signature.nvim",
+		config = function()
+			require "lsp_signature".setup({
+				bind = true,
+				handler_opts = {
+					border = "rounded"
+				},
+			})
+		end
+	},
+	{ "folke/tokyonight.nvim" }
 }
 
 require("symbols-outline").setup()
