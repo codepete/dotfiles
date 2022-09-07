@@ -37,3 +37,4 @@ yabai -m rule --add app="^Pritunl$" manage=off
 yabai -m rule --add app="^1Password$" manage=off
 yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add app="^Self Service$" manage=off
+yabai -m rule --add app="^Finder$" manage=off
