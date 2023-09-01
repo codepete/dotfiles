@@ -14,14 +14,22 @@ vim.opt.expandtab = false
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = false
-lvim.colorscheme = "onedarker"
+lvim.colorscheme = "darkplus"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
-lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+lvim.keys.normal_mode["<S-h>"] = ":bprev<cr>"
+lvim.keys.normal_mode["<S-l>"] = ":bnext<cr>"
+lvim.keys.normal_mode = {
+  -- Better window movement
+  ["<C-h>"] = "<C-w>h",
+  ["<C-j>"] = "<C-w>j",
+  ["<C-k>"] = "<C-w>k",
+  ["<C-l>"] = "<C-w>l",
+}
 -- unmap a default keymapping
 --     ["<C-n>"] = actions.cycle_history_next, ["<C-p>"] = actions.cycle_history_prev,
 --   },
@@ -33,6 +41,15 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 -- }
 
 -- Use which-key to add extra bindings with the leader-key prefix
+lvim.builtin.which_key.mappings["t"] = {
+  name = "Diagnostics",
+  t = { "<cmd>TroubleToggle<cr>", "trouble" },
+  w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
+  d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
+  q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
+  l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
+  r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
+}
 lvim.builtin.which_key.mappings["dv"] = { "<cmd>lua require('dapui').toggle()<CR>", "Toggle Debug UI View" }
 lvim.builtin.which_key.mappings["lo"] = { "<cmd>SymbolOutline<CR>", "Toggle SymbolOutline" }
 lvim.builtin.which_key.mappings["lh"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" }
@@ -49,9 +66,9 @@ lvim.builtin.which_key.mappings["lh"] = { "<cmd>lua vim.lsp.buf.signature_help()
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
+lvim.builtin.lir.active = false
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
@@ -97,7 +114,15 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- ---@usage disable automatic installation of servers
 -- lvim.lsp.automatic_servers_installation = false
 
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "gopls" })
+
+-- set a formatter, this will override the language server formatting capabilities (if it exists)
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+	{ command = "google_java_format", filetypes = { "java" } },
+}
+
+-- Additional Plugins
+
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
@@ -156,6 +181,13 @@ vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "gopls" })
 
 -- Additional Plugins
 lvim.plugins = {
+	{ "mfussenegger/nvim-jdtls" },
+	{
+		"tzachar/cmp-tabnine",
+		build = "./install.sh",
+		dependencies = "hrsh7th/nvim-cmp",
+		event = "InsertEnter",
+	},
 	{
 		"nvim-telescope/telescope-dap.nvim",
 		config = function()
@@ -175,25 +207,19 @@ lvim.plugins = {
 		end
 	},
 	{
-		"tzachar/cmp-tabnine",
-		run = "./install.sh",
-		requires = "hrsh7th/nvim-cmp",
-		config = function()
-			local tabnine = require("cmp_tabnine.config")
-			tabnine:setup {
-				max_lines = 1000,
-				max_num_results = 10,
-				sort = true,
-			}
-		end,
-		opt = true,
-		event = "InsertEnter",
-	},
-	{
 		"nvim-treesitter/nvim-treesitter-context",
 		config = function()
 			require("treesitter-context").setup()
 		end
+	},
+	{
+		"folke/trouble.nvim",
+		cmd = "TroubleToggle",
+	},
+	{
+		"ray-x/lsp_signature.nvim",
+		event = "BufRead",
+		config = function() require"lsp_signature".on_attach() end,
 	},
 	{
 		"simrat39/symbols-outline.nvim",
@@ -204,8 +230,13 @@ lvim.plugins = {
 	{
 		"glepnir/lspsaga.nvim",
 		config = function()
-			require("lspsaga").init_lsp_saga()
-		end
+			require("lspsaga").setup({})
+		end,
+		dependencies = {
+			{ "nvim-tree/nvim-web-devicons" },
+			--Please make sure you install markdown and markdown_inline parser
+			{ "nvim-treesitter/nvim-treesitter" }
+		}
 	},
 	{
 		"ray-x/lsp_signature.nvim",
@@ -218,7 +249,8 @@ lvim.plugins = {
 			})
 		end
 	},
-	{ "folke/tokyonight.nvim" }
+	{ "folke/tokyonight.nvim" },
+	{ "lunarvim/colorschemes" }
 }
 
 require("symbols-outline").setup()
@@ -236,3 +268,4 @@ require("symbols-outline").setup()
 --     require("nvim-treesitter.highlight").attach(0, "bash")
 --   end,
 -- })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "gopls", "jdtls" })
