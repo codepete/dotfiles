@@ -95,6 +95,32 @@ lvim.builtin.treesitter.ensure_installed = {
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
 
+-- telescope settings
+lvim.builtin.telescope.pickers = {
+  find_files = {
+    layout_config = {
+      width = 0.95,
+    },
+  },
+  git_files = {
+    layout_config = {
+      width = 0.95,
+      height = 0.95,
+    },
+  },
+  grep_string = {
+    layout_config = {
+      width = 0.95,
+      height = 0.95,
+    },
+  },
+  live_grep = {
+    layout_config = {
+      width = 0.95,
+    },
+  },
+}
+
 -- generic LSP settings
 
 -- -- make sure server will always be installed even if the server is in skipped_servers list
