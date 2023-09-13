@@ -9,12 +9,15 @@ an executable
 vim.opt.guicursor = ""
 vim.opt.nu = true
 vim.opt.relativenumber = true
-vim.opt.expandtab = false
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
 
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = false
-lvim.colorscheme = "darkplus"
+lvim.colorscheme = "catppuccin"
+
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -41,29 +44,19 @@ lvim.keys.normal_mode = {
 -- }
 
 -- Use which-key to add extra bindings with the leader-key prefix
-lvim.builtin.which_key.mappings["t"] = {
-  name = "Diagnostics",
-  t = { "<cmd>TroubleToggle<cr>", "trouble" },
-  w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
-  d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
-  q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
-  l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
-  r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
-}
 lvim.builtin.which_key.mappings["dv"] = { "<cmd>lua require('dapui').toggle()<CR>", "Toggle Debug UI View" }
 lvim.builtin.which_key.mappings["lo"] = { "<cmd>SymbolOutline<CR>", "Toggle SymbolOutline" }
 lvim.builtin.which_key.mappings["lh"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" }
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
---   name = "+Trouble",
---   r = { "<cmd>Trouble lsp_references<cr>", "References" },
---   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
---   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
---   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
---   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
--- }
-
+lvim.builtin.which_key.mappings["t"] = {
+  name = "+Trouble",
+  r = { "<cmd>Trouble lsp_references<cr>", "References" },
+  f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
+  d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
+  q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
+  l = { "<cmd>Trouble loclist<cr>", "LocationList" },
+  w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
+}
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.lir.active = false
@@ -77,49 +70,49 @@ lvim.builtin.dap.active = true
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
-	"bash",
-	"c",
-	"javascript",
-	"json",
-	"lua",
-	"python",
-	"typescript",
-	"tsx",
-	"css",
-	"rust",
-	"java",
-	"yaml",
-	"go",
+  "bash",
+  "c",
+  "javascript",
+  "json",
+  "lua",
+  "python",
+  "typescript",
+  "tsx",
+  "css",
+  "rust",
+  "java",
+  "yaml",
+  "go",
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
 
 -- telescope settings
+lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
+lvim.builtin.telescope.defaults.borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
 lvim.builtin.telescope.pickers = {
   find_files = {
     layout_config = {
-      width = 0.95,
-    },
-  },
-  git_files = {
-    layout_config = {
-      width = 0.95,
-      height = 0.95,
-    },
-  },
-  grep_string = {
-    layout_config = {
-      width = 0.95,
-      height = 0.95,
+      width = 0.80,
+      height = 0.80,
     },
   },
   live_grep = {
     layout_config = {
-      width = 0.95,
+      width = 0.80,
+      height = 0.80,
+    },
+  },
+  grep_string = {
+    layout_config = {
+      width = 0.80,
+      height = 0.80,
     },
   },
 }
+
+
 
 -- generic LSP settings
 
@@ -144,7 +137,7 @@ lvim.builtin.telescope.pickers = {
 -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
-	{ command = "google_java_format", filetypes = { "java" } },
+  { command = "google_java_format", filetypes = { "java" } },
 }
 
 -- Additional Plugins
@@ -207,76 +200,83 @@ formatters.setup {
 
 -- Additional Plugins
 lvim.plugins = {
-	{ "mfussenegger/nvim-jdtls" },
-	{
-		"tzachar/cmp-tabnine",
-		build = "./install.sh",
-		dependencies = "hrsh7th/nvim-cmp",
-		event = "InsertEnter",
-	},
-	{
-		"nvim-telescope/telescope-dap.nvim",
-		config = function()
-			require('telescope').load_extension('dap')
-		end
-	},
-	{
-		"rcarriga/nvim-dap-ui",
-		config = function()
-			require("dapui").setup()
-		end
-	},
-	{
-		"leoluz/nvim-dap-go",
-		config = function()
-			require('dap-go').setup()
-		end
-	},
-	{
-		"nvim-treesitter/nvim-treesitter-context",
-		config = function()
-			require("treesitter-context").setup()
-		end
-	},
-	{
-		"folke/trouble.nvim",
-		cmd = "TroubleToggle",
-	},
-	{
-		"ray-x/lsp_signature.nvim",
-		event = "BufRead",
-		config = function() require"lsp_signature".on_attach() end,
-	},
-	{
-		"simrat39/symbols-outline.nvim",
-		config = function()
-			require("symbols-outline").setup()
-		end
-	},
-	{
-		"glepnir/lspsaga.nvim",
-		config = function()
-			require("lspsaga").setup({})
-		end,
-		dependencies = {
-			{ "nvim-tree/nvim-web-devicons" },
-			--Please make sure you install markdown and markdown_inline parser
-			{ "nvim-treesitter/nvim-treesitter" }
-		}
-	},
-	{
-		"ray-x/lsp_signature.nvim",
-		config = function()
-			require "lsp_signature".setup({
-				bind = true,
-				handler_opts = {
-					border = "rounded"
-				},
-			})
-		end
-	},
-	{ "folke/tokyonight.nvim" },
-	{ "lunarvim/colorschemes" }
+  { "mfussenegger/nvim-jdtls" },
+  {
+    "tzachar/cmp-tabnine",
+    build = "./install.sh",
+    dependencies = "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+  },
+  {
+    "nvim-telescope/telescope-dap.nvim",
+    config = function()
+      require('telescope').load_extension('dap')
+    end
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    config = function()
+      require("dapui").setup()
+    end
+  },
+  {
+    "leoluz/nvim-dap-go",
+    config = function()
+      require('dap-go').setup()
+    end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    config = function()
+      require("treesitter-context").setup()
+    end
+  },
+  {
+    "folke/trouble.nvim",
+    cmd = "TroubleToggle",
+  },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "BufRead",
+    config = function() require"lsp_signature".on_attach() end,
+  },
+  {
+    "simrat39/symbols-outline.nvim",
+    config = function()
+      require("symbols-outline").setup()
+    end
+  },
+  {
+    "glepnir/lspsaga.nvim",
+    config = function()
+      require("lspsaga").setup({})
+    end,
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons" },
+      --Please make sure you install markdown and markdown_inline parser
+      { "nvim-treesitter/nvim-treesitter" }
+    }
+  },
+  {
+    "ray-x/lsp_signature.nvim",
+    config = function()
+      require "lsp_signature".setup({
+        bind = true,
+        handler_opts = {
+          border = "rounded"
+        },
+      })
+    end
+  },
+  { "folke/tokyonight.nvim" },
+  { "lunarvim/colorschemes" },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  }
 }
 
 require("symbols-outline").setup()
