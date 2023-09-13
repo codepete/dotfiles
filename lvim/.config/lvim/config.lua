@@ -47,6 +47,7 @@ lvim.keys.normal_mode = {
 lvim.builtin.which_key.mappings["dv"] = { "<cmd>lua require('dapui').toggle()<CR>", "Toggle Debug UI View" }
 lvim.builtin.which_key.mappings["lo"] = { "<cmd>SymbolOutline<CR>", "Toggle SymbolOutline" }
 lvim.builtin.which_key.mappings["lh"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" }
+
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 lvim.builtin.which_key.mappings["t"] = {
   name = "+Trouble",
@@ -57,6 +58,15 @@ lvim.builtin.which_key.mappings["t"] = {
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
 }
+
+lvim.builtin.which_key.mappings["H"] = {
+  name = "harpoon",
+  m = { "<cmd>lua require('harpoon.mark').add_file()<cr>", "Mark file with harpoon" },
+  n = { "<cmd>lua require('harpoon.ui').nav_next()<cr>", "Go to next harpoon mark" },
+  p = { "<cmd>lua require('harpoon.ui').nav_prev()<cr>", "Go to previous harpoon mark" },
+  a = { "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", "Show harpoon marks" },
+}
+
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.lir.active = false
@@ -276,7 +286,15 @@ lvim.plugins = {
     lazy = false,
     priority = 1000,
     opts = {},
-  }
+  },
+  {
+    "ThePrimeagen/harpoon",
+    lazy = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = true,
+  },
 }
 
 require("symbols-outline").setup()
